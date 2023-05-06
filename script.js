@@ -9,7 +9,7 @@ const data = {
     width: canvas.width,
     height: canvas.height,
     GravityConstant: 0.1,   //1
-    ElasticModulus: 10    //20
+    ElasticModulus: 1    //20
 }
 
 const PI2 = Math.PI * 2
@@ -88,22 +88,36 @@ class Ball {
     }
 }
 
+const recordData = []
+
 const renderObj = []
 renderObj.push(new Ball(data.Origin.x + 100, data.Origin.y + 100, 10, 5, data.Origin))
-renderObj.push(new Ball(renderObj[0].x + 200, renderObj[0].y + 100, 10, 5, renderObj[0].pos))
-ctx2.fillStyle='rgba(255,60,25,0.1)'
+renderObj.push(new Ball(renderObj[0].x - 100, renderObj[0].y + 100, 10, 5, renderObj[0].pos))
+renderObj.push(new Ball(renderObj[1].x - 100, renderObj[1].y + 100, 10, 5, renderObj[1].pos))
+
+ctx2.fillStyle = 'rgba(255,60,25,0.5)'
 function render() {
+    if (recordData.length == 600) {
+        for (var i = 0; i < recordData.length; i++) {
+            print(`[${recordData[i][0]}, ${recordData[i][1]}],`)
+        }
+    }
     ctx.clearRect(0, 0, data.width, data.height)
 
     drawCircle(data.Origin.x, data.Origin.y, 2)
     renderObj[0].draw()
     renderObj[0].move()
 
-    renderObj[1].draw()
+    /*renderObj[1].draw()
     renderObj[1].move()
 
+    renderObj[2].draw()
+    renderObj[2].move()*/
+
+    recordData.push([renderObj[0].x, renderObj[0].y])
+
     ctx2.beginPath()
-    ctx2.arc(renderObj[1].x, renderObj[1].y, 1, 0, PI2)
+    ctx2.arc(renderObj[0].x, renderObj[0].y, 1, 0, PI2)
     ctx2.fill()
     ctx2.closePath()
 
